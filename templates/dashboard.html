@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Data Visualization Dashboard</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        #chart {
+            width: 800px;
+            height: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .button-container button {
+            margin: 0 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .button-container button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Data Visualization Dashboard</h1>
+
+    <div class="button-container">
+        <button id="graphBtn">Graph</button>
+        <button id="pieChartBtn">Pie Chart</button>
+    </div>
+
+    <div id="chart"></div>
+
+    <script>
+        // Parse the chart JSON passed from the server
+        var graphJson = JSON.parse('{{ graph_json|safe }}');
+        var pieJson = JSON.parse('{{ pie_json|safe }}');
+
+        // Create the initial Plotly chart
+        var chart = Plotly.newPlot('chart', graphJson.data, graphJson.layout);
+
+        // Function to update the chart with new data
+        function updateChart(chartData) {
+            Plotly.react('chart', chartData.data, chartData.layout);
+        }
+
+        // Button click event handlers
+        document.getElementById('graphBtn').addEventListener('click', function() {
+            updateChart(graphJson);
+        });
+
+        document.getElementById('pieChartBtn').addEventListener('click', function() {
+            updateChart(pieJson);
+        });
+    </script>
+</body>
+</html>
